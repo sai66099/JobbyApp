@@ -1,0 +1,159 @@
+.main-container {
+  background-color: #000000;
+  padding: 30px;
+  font-family: 'Roboto';
+}
+
+.sub-container {
+  background-color: #202020;
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.star-icon {
+  color: yellow;
+  align-self: center;
+}
+
+.job-card-company-logo {
+  width: 80px;
+  align-self: flex-start;
+}
+
+.title {
+  color: white;
+  font-size: 20px;
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.first-container {
+  display: flex;
+}
+
+.title-rating-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 20px;
+}
+
+.rating-container {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 0px;
+}
+
+.rating-text {
+  color: white;
+  margin-left: 15px;
+}
+
+.test {
+  border: 1px solid red;
+}
+
+.location-class {
+  color: white;
+  display: flex;
+}
+
+.location-margin {
+  margin-left: 50px;
+}
+
+.location-info {
+  color: white;
+  margin-left: 10px;
+}
+
+.location-icon {
+  align-self: center;
+}
+
+.location-employment-container {
+  display: flex;
+}
+
+.package-class {
+  color: white;
+}
+
+.location-main-container {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+.description-class {
+  font-size: 18px;
+}
+
+.job-description-class {
+  font-size: 15px;
+}
+
+.link-description-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.website-link-class {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #b6c5ff;
+}
+
+.website-link-icon {
+  align-self: center;
+  margin-left: 5px;
+}
+
+.skills-class {
+  list-style-type: none;
+  padding-left: 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skills-container {
+  color: white;
+}
+
+.skills-list {
+  display: flex;
+  justify-content: row;
+  margin-right: 50px;
+}
+
+.life-at-company-class {
+  display: flex;
+  justify-content: space-between;
+}
+
+.company-life-description-class {
+  margin-right: 30px;
+}
+
+.similar-jobs-section {
+  color: white;
+  font-family: 'Roboto';
+}
+
+.similar-jobs-list-container {
+  list-style-type: none;
+  padding-left: 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.similar-jobs-list {
+  background-color: #202020;
+  border-radius: 10px;
+  padding: 20px;
+  width: 30%;
+  margin-right: 30px;
+}

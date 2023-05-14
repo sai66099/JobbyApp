@@ -1,0 +1,98 @@
+.job-card-container {
+  background-color: #202020;
+  color: white;
+  font-family: 'Roboto';
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+  margin-left: 0px;
+}
+
+.star-icon {
+  color: yellow;
+  align-self: center;
+}
+
+.job-card-company-logo {
+  width: 80px;
+  align-self: flex-start;
+}
+
+.title {
+  color: white;
+  font-size: 20px;
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.first-container {
+  display: flex;
+}
+
+.title-rating-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 20px;
+}
+
+.rating-container {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 0px;
+}
+
+.rating-text {
+  color: white;
+  margin-left: 15px;
+}
+
+.test {
+  border: 1px solid red;
+}
+
+.location-class {
+  color: white;
+  display: flex;
+}
+
+.location-margin {
+  margin-left: 50px;
+}
+
+.location-info {
+  color: white;
+  margin-left: 10px;
+}
+
+.location-icon {
+  align-self: center;
+}
+
+.location-employment-container {
+  display: flex;
+}
+
+.package-class {
+  color: white;
+}
+
+.location-main-container {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+.description-class {
+  font-size: 18px;
+}
+
+.job-description-class {
+  font-size: 15px;
+}
+
+.link-class {
+  text-decoration: none;
+  color: white;
+}

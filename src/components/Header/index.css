@@ -1,0 +1,33 @@
+.nav-container {
+  background-color: #202020;
+
+  padding: 20px;
+  margin-bottom: 0px;
+}
+.nav-list-class {
+  list-style-type: none;
+  padding-left: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+.header-image-class {
+  width: 160px;
+}
+
+.header-link {
+  color: white;
+  text-decoration: none;
+  margin-right: 30px;
+  font-weight: bold;
+}
+.links-container {
+  align-self: center;
+}
+
+.header-logout-button {
+  background-color: #4f46e5;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  color: white;
+}
