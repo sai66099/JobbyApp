@@ -3,6 +3,7 @@
   min-height: 100vh;
   padding: 20px;
   display: flex;
+  align-items: flex-start;
 }
 
 .heading-class {
@@ -10,7 +11,7 @@
 }
 
 .profile-main-container {
-  width: 80vw;
+  width: 20vw;
   margin-right: 60px;
 }
 
@@ -31,6 +32,9 @@
   color: white;
 }
 
+.search-main-container {
+  width: 80vw;
+}
 .search-container {
   height: 38px;
 }
@@ -60,4 +64,8 @@
 .job-card-main-container {
   list-style-type: none;
   padding-left: 0px;
+}
+
+.search-icon {
+  color: white;
 }

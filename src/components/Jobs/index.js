@@ -16,6 +16,14 @@ const apiStatusConstants = {
   failure: 'FAILURE',
 }
 
+const locations = [
+  {locationId: 'HYDERABAD', location: 'Hyderabad'},
+  {locationId: 'DELHI', location: 'Delhi'},
+  {locationId: 'BANGALORE', location: 'Bangalore'},
+  {locationId: 'CHENNAI', location: 'Chennai'},
+  {locationId: 'MUMBAI', location: 'Mumbai'},
+]
+
 class Jobs extends Component {
   state = {
     profileDetails: {},
@@ -24,7 +32,11 @@ class Jobs extends Component {
     packageExpecting: 0,
     searchInput: '',
     apiJobStatus: apiStatusConstants.initial,
-    apiprofileStatus: apiStatusConstants.initial,
+    apiProfileStatus: apiStatusConstants.initial,
+    isJobFailed: true,
+    isProfileFailed: true,
+    searchFail: false,
+    location: [],
   }
 
   componentDidMount() {
@@ -37,9 +49,9 @@ class Jobs extends Component {
   }
 
   getJobsData = async () => {
-    const {employmentType, packageExpecting, searchInput} = this.state
+    const {employmentType, packageExpecting, searchInput, location} = this.state
     const joinedString = employmentType.join(',')
-    console.log(searchInput)
+
     const token = Cookies.get('jwt_token')
     const JobApiUrl = `https://apis.ccbp.in/jobs?employment_type=${joinedString}&minimum_package=${packageExpecting}&search=${searchInput}`
     const options = {
@@ -49,22 +61,36 @@ class Jobs extends Component {
       },
     }
     const response = await fetch(JobApiUrl, options)
+
     if (response.ok) {
       const data = await response.json()
-      const jobDetails = data.jobs.map(eachJob => ({
-        companyLogoUrl: eachJob.company_logo_url,
-        employmentType: eachJob.employment_type,
-        id: eachJob.id,
-        title: eachJob.title,
-        location: eachJob.location,
-        rating: eachJob.rating,
-        jobDescription: eachJob.job_description,
-        packagePerAnnum: eachJob.package_per_annum,
-      }))
-      this.setState({jobDetails, apiJobStatus: apiStatusConstants.success})
-    }
-    if (response.status === 401) {
-      this.setState({apiJobStatus: apiStatusConstants.failure})
+      if (data.jobs.length === 0) {
+        this.setState({searchFail: true})
+      } else {
+        console.log(data)
+        const jobDetails = data.jobs.map(eachJob => ({
+          companyLogoUrl: eachJob.company_logo_url,
+          employmentType: eachJob.employment_type,
+          id: eachJob.id,
+          title: eachJob.title,
+          location: eachJob.location,
+          rating: eachJob.rating,
+          jobDescription: eachJob.job_description,
+          packagePerAnnum: eachJob.package_per_annum,
+        }))
+        this.setState({
+          jobDetails,
+          apiJobStatus: apiStatusConstants.success,
+          isJobFailed: false,
+          searchFail: false,
+        })
+      }
+      if (response.status === 401) {
+        this.setState({
+          apiJobStatus: apiStatusConstants.failure,
+          isJobFailed: false,
+        })
+      }
     }
   }
 
@@ -78,6 +104,7 @@ class Jobs extends Component {
       },
     }
     const response = await fetch(url, options)
+    console.log(response)
     if (response.ok) {
       const data = await response.json()
 
@@ -89,10 +116,14 @@ class Jobs extends Component {
       this.setState({
         profileDetails,
         apiProfileStatus: apiStatusConstants.success,
+        isProfileFailed: false,
       })
     }
     if (response.status === 401) {
-      this.setState({apiProfileStatus: apiStatusConstants.failure})
+      this.setState({
+        apiProfileStatus: apiStatusConstants.failure,
+        isProfileFailed: false,
+      })
     }
   }
 
@@ -111,6 +142,19 @@ class Jobs extends Component {
         eachItem => eachItem !== checkboxId,
       )
       this.setState({employmentType: filterList}, this.getJobsData)
+    }
+  }
+
+  locationFunction = event => {
+    const {location} = this.state
+    const checkboxId = event.target.id
+
+    if (event.target.checked === true) {
+      this.setState({location: [...location, checkboxId]}, this.getJobsData)
+    }
+    if (event.target.checked === false) {
+      const filterList = location.filter(eachItem => eachItem !== checkboxId)
+      this.setState({location: filterList}, this.getJobsData)
     }
   }
 
@@ -141,35 +185,68 @@ class Jobs extends Component {
     const {profileImageUrl, name, shortBio} = profileDetails
     return (
       <div className="profile-container">
-        <img src={profileImageUrl} />
+        <img src={profileImageUrl} alt="profile" />
         <h1>{name}</h1>
         <p>{shortBio}</p>
       </div>
     )
   }
 
+  renderProfileFailureView = () => (
+    <>
+      <button type="button" onClick={this.getProfileData}>
+        Retry
+      </button>
+    </>
+  )
+
   renderJobSuccessView = () => {
-    const {jobDetails} = this.state
+    const {jobDetails, location} = this.state
+    let filteredList = []
+    if (location.length !== 0) {
+      filteredList = jobDetails.filter(eachItem =>
+        location.includes(eachItem.location),
+      )
+    } else {
+      filteredList = jobDetails
+    }
+
     return (
       <ul className="job-card-main-container">
-        {jobDetails.map(eachItem => (
+        {filteredList.map(eachItem => (
           <JobCard details={eachItem} key={eachItem.id} />
         ))}
       </ul>
     )
   }
 
-  renderJobFailureView = () => (
+  renderSearchFailureView = () => (
     <div className="main-container">
       <img
-        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+        src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
         className="failure-view-class"
-        alt="profile"
+        alt="no jobs"
       />
-      <h1>Oops! Something Went Wrong</h1>
-      <p>We cannot seem to find the page you are looking for.</p>
-      <button>Retry</button>
+      <h1>No Jobs Found</h1>
+      <p>We could not find any jobs. Try other filters</p>
     </div>
+  )
+
+  renderJobFailureView = () => (
+    <>
+      <div className="main-container">
+        <img
+          src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+          className="failure-view-class"
+          alt="failure view"
+        />
+        <h1>Oops! Something Went Wrong</h1>
+        <p>We cannot seem to find the page you are looking for</p>
+        <button type="button" onClick={this.getJobsData}>
+          Retry
+        </button>
+      </div>
+    </>
   )
 
   renderLoadingView = () => (
@@ -179,7 +256,8 @@ class Jobs extends Component {
   )
 
   renderProfileViews = () => {
-    const {apiProfileStatus} = this.state
+    const {apiProfileStatus, isProfileFailed} = this.state
+
     switch (apiProfileStatus) {
       case apiStatusConstants.success:
         return this.renderProfileSuccessView()
@@ -193,7 +271,10 @@ class Jobs extends Component {
   }
 
   renderJobViews = () => {
-    const {apiJobStatus} = this.state
+    const {apiJobStatus, isJobFailed} = this.state
+    if (isJobFailed) {
+      return this.renderJobFailureView()
+    }
     switch (apiJobStatus) {
       case apiStatusConstants.success:
         return this.renderJobSuccessView()
@@ -215,6 +296,7 @@ class Jobs extends Component {
       searchInput,
       apiprofileStatus,
       apiJobStatus,
+      searchFail,
     } = this.state
     const {profileImageUrl, name, shortBio} = profileDetails
     const {employmentTypesList, salaryRangesList} = this.props
@@ -225,8 +307,11 @@ class Jobs extends Component {
       return <Redirect path="/login" />
     }
     return (
-      <>
-        <Header />
+      <div className="job-container">
+        <div className="header-container">
+          <Header />
+        </div>
+
         <div className="job-main-container">
           <div className="profile-main-container">
             {this.renderProfileViews()}
@@ -272,9 +357,30 @@ class Jobs extends Component {
                 </li>
               ))}
             </ul>
+
+            <hr />
+
+            <h1 className="heading-class">Location</h1>
+            <ul>
+              {locations.map(eachType => (
+                <li key={eachType.locationId}>
+                  <input
+                    type="checkbox"
+                    id={eachType.location}
+                    onChange={this.locationFunction}
+                  />
+                  <label
+                    htmlFor={eachType.locationId}
+                    className="employmentLabel"
+                  >
+                    {eachType.location}
+                  </label>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div>
+          <div className="search-main-container">
             <div className="search-container">
               <input
                 type="search"
@@ -283,18 +389,22 @@ class Jobs extends Component {
                 onChange={this.onTextChange}
                 onKeyDown={this.onKeyChange}
               />
+
               <button
-                className="search-button"
-                onClick={this.onClickSearchIcon}
+                type="button"
                 data-testid="searchButton"
+                onClick={this.onClickSearchIcon}
+                className="search-button"
               >
-                <BsSearch />
+                <BsSearch className="search-icon" />
               </button>
             </div>
-            {this.renderJobViews()}
+            {searchFail
+              ? this.renderSearchFailureView()
+              : this.renderJobViews()}
           </div>
         </div>
-      </>
+      </div>
     )
   }
 }

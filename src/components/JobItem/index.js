@@ -5,6 +5,9 @@ import {FaExternalLinkAlt} from 'react-icons/fa'
 import {GoLocation} from 'react-icons/go'
 
 import Cookies from 'js-cookie'
+
+import Header from '../Header'
+
 import './index.css'
 
 const apiStatusConstants = {
@@ -103,15 +106,19 @@ class JobItem extends Component {
   )
 
   renderJobItemFailureView = () => (
-    <div className="main-container">
-      <img
-        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
-        className="failure-view-class"
-      />
-      <h1>Oops! Something Went Wrong</h1>
-      <p>We cannot seem to find the page you are looking for.</p>
-      <button>Retry</button>
-    </div>
+    <>
+      <Header />
+      <div className="main-container">
+        <img
+          src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+          className="failure-view-class"
+          alt="failure view"
+        />
+        <h1>Oops! Something Went Wrong</h1>
+        <p>We cannot seem to find the page you are looking for.</p>
+        <button onClick={this.getResponse}>Retry</button>
+      </div>
+    </>
   )
 
   renderJobItemView = () => {
@@ -135,114 +142,121 @@ class JobItem extends Component {
       console.log(location)
       console.log(rating)
       return (
-        <div className="main-container">
-          <div className="sub-container">
-            <div className="first-container">
-              <img
-                src={companyLogoUrl}
-                className="job-card-company-logo"
-                alt="job details company logo"
-              />
+        <>
+          <Header />
+          <div className="main-container">
+            <div className="sub-container">
+              <div className="first-container">
+                <img
+                  src={companyLogoUrl}
+                  className="job-card-company-logo"
+                  alt="job details company logo"
+                />
 
-              <div className="title-rating-container">
-                <h1 className="title">{title}</h1>
-                <div className="rating-container">
-                  <BsFillStarFill className="star-icon" />
+                <div className="title-rating-container">
+                  <h1 className="title">{title}</h1>
+                  <div className="rating-container">
+                    <BsFillStarFill className="star-icon" />
 
-                  <p className="rating-text">{rating}</p>
+                    <p className="rating-text">{rating}</p>
+                  </div>
                 </div>
+              </div>
+
+              <div className="location-main-container">
+                <div className="location-employment-container">
+                  <div className="location-class">
+                    <GoLocation className="location-icon" />
+
+                    <p className="location-info">{location}</p>
+                  </div>
+                  <div className="location-class location-margin">
+                    <BsBriefcase className="location-icon" />
+
+                    <p className="location-info">{employmentType}</p>
+                  </div>
+                </div>
+                <p className="package-class">{packagePerAnnum}</p>
+              </div>
+
+              <hr />
+              <div className="link-description-container">
+                <h1 className="description-class">Description</h1>
+                <a
+                  href={companyWebsiteUrl}
+                  className="website-link-class"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Visit
+                  <FaExternalLinkAlt className="website-link-icon" />
+                </a>
+              </div>
+
+              <p className="job-description-class">{jobDescription}</p>
+              <div className="skills-container">
+                <h1>Skills</h1>
+                <ul className="skills-class">
+                  {skills.map(eachItem => (
+                    <li key={skills.indexOf(eachItem)} className="skills-list">
+                      <img src={eachItem.imageUrl} alt={eachItem.name} />
+                      <p>{eachItem.name}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="life-at-company-class">
+                <div className="company-life-description-class">
+                  <h1>Life at Company</h1>
+                  <p>{description}</p>
+                </div>
+                <img src={imageUrl} alt="life at company" />
               </div>
             </div>
 
-            <div className="location-main-container">
-              <div className="location-employment-container">
-                <div className="location-class">
-                  <GoLocation className="location-icon" />
-                  <p className="location-info">{location}</p>
-                </div>
-                <div className="location-class location-margin">
-                  <BsBriefcase className="location-icon" />
-                  <p className="location-info">{employmentType}</p>
-                </div>
-              </div>
-              <p className="package-class">{packagePerAnnum}</p>
-            </div>
+            <div className="similar-jobs-section">
+              <h1>Similar Jobs</h1>
+              <ul className="similar-jobs-list-container">
+                {similarJobsInfo.map(eachItem => (
+                  <li className="similar-jobs-list" key={eachItem.id}>
+                    <div className="first-container">
+                      <img
+                        src={eachItem.companyLogoUrl}
+                        className="job-card-company-logo"
+                        alt="similar job company logo"
+                      />
 
-            <hr />
-            <div className="link-description-container">
-              <h1 className="description-class">Description</h1>
-              <a
-                href={companyWebsiteUrl}
-                className="website-link-class"
-                target="_blank"
-                rel="noreferrer"
-              >
-                visit
-                <FaExternalLinkAlt className="website-link-icon" />
-              </a>
-            </div>
+                      <div className="title-rating-container">
+                        <h1 className="title">{eachItem.title}</h1>
+                        <div className="rating-container">
+                          <BsFillStarFill className="star-icon" />
 
-            <p className="job-description-class">{jobDescription}</p>
-            <div className="skills-container">
-              <h1>Skills</h1>
-              <ul className="skills-class">
-                {skills.map(eachItem => (
-                  <li key={skills.indexOf(eachItem)} className="skills-list">
-                    <img src={eachItem.imageUrl} alt={eachItem.name} />
-                    <p>{eachItem.name}</p>
+                          <p className="rating-text">{eachItem.rating}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <h1 className="description-class">Description</h1>
+                    <p className="job-description-class">
+                      {eachItem.jobDescription}
+                    </p>
+                    <div className="location-employment-container">
+                      <div className="location-class">
+                        <GoLocation className="location-icon" />
+                        <p className="location-info">{eachItem.location}</p>
+                      </div>
+                      <div className="location-class location-margin">
+                        <BsBriefcase className="location-icon" />
+                        <p className="location-info">
+                          {eachItem.employmentType}
+                        </p>
+                      </div>
+                    </div>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="life-at-company-class">
-              <div className="company-life-description-class">
-                <h1>Life at Company</h1>
-                <p>{description}</p>
-              </div>
-              <img src={imageUrl} alt="life at company" />
-            </div>
           </div>
-
-          <div className="similar-jobs-section">
-            <h1>Similar Jobs</h1>
-            <ul className="similar-jobs-list-container">
-              {similarJobsInfo.map(eachItem => (
-                <li className="similar-jobs-list" key={eachItem.id}>
-                  <div className="first-container">
-                    <img
-                      src={eachItem.companyLogoUrl}
-                      className="job-card-company-logo"
-                      alt="similar job company logo"
-                    />
-
-                    <div className="title-rating-container">
-                      <h1 className="title">{eachItem.title}</h1>
-                      <div className="rating-container">
-                        <BsFillStarFill className="star-icon" />
-
-                        <p className="rating-text">{eachItem.rating}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <h1 className="description-class">Description</h1>
-                  <p className="job-description-class">
-                    {eachItem.jobDescription}
-                  </p>
-                  <div className="location-employment-container">
-                    <div className="location-class">
-                      <GoLocation className="location-icon" />
-                      <p className="location-info">{location}</p>
-                    </div>
-                    <div className="location-class location-margin">
-                      <BsBriefcase className="location-icon" />
-                      <p className="location-info">{employmentType}</p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        </>
       )
     }
     return ''
@@ -250,7 +264,7 @@ class JobItem extends Component {
 
   render() {
     const {apiStatus} = this.state
-    switch ('SUCCESS') {
+    switch (apiStatus) {
       case apiStatusConstants.success:
         return this.renderJobItemView()
       case apiStatusConstants.failure:

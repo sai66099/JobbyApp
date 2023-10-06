@@ -4,9 +4,10 @@ import Cookies from 'js-cookie'
 import './index.css'
 
 const Header = props => {
+  const {history} = props
+
   const onLogout = () => {
     Cookies.remove('jwt_token')
-    const {history} = props
     history.replace('/login')
   }
   return (
@@ -26,20 +27,19 @@ const Header = props => {
           <Link to="/" className="header-link">
             Home
           </Link>
-        </li>
-        <li>
+
           <Link to="/jobs" className="header-link">
             Jobs
           </Link>
         </li>
+        <li>
+          <button className="header-logout-button" onClick={onLogout}>
+            Logout
+          </button>
+        </li>
       </ul>
-      <Link to="/login">
-        <button className="header-logout-button" onClick={onLogout}>
-          Logout
-        </button>
-      </Link>
     </nav>
   )
 }
 
-export default Header
+export default withRouter(Header)

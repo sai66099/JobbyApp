@@ -1,8 +1,12 @@
 .nav-container {
   background-color: #202020;
-
+  width: 100vw;
   padding: 20px;
-  margin-bottom: 0px;
+  margin-bottom: 1px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
 }
 .nav-list-class {
   list-style-type: none;
